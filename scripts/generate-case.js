@@ -15,6 +15,16 @@ const beirutSource = path.join(root, 'assets', 'beirut-traced.svg')
 const keyDeckDrop = 4.4
 const keyRearBoundary = 88
 
+function findImageMagick() {
+  for (const command of ['magick', 'convert']) {
+    const probe = spawnSync(command, ['-version'], { stdio: 'ignore' })
+    if (!probe.error && probe.status === 0) return command
+  }
+  throw new Error('ImageMagick is required (expected `magick` or `convert`)')
+}
+
+const imageMagick = findImageMagick()
+
 function parsePbm(output, label) {
   const tokens = output.replace(/#[^\n]*/g, '').trim().split(/\s+/)
   if (tokens.shift() !== 'P1') throw new Error(`Unexpected ${label} mask format`)
@@ -46,7 +56,7 @@ function maskToCutter(mask, identifier, targetWidth, centerX, centerY) {
 }
 
 function addCoverEngravings(source) {
-  const cedarMaskResult = spawnSync('magick', [
+  const cedarMaskResult = spawnSync(imageMagick, [
     cedarSource, '-trim', '+repage', '-resize', '256x256',
     '-background', 'white', '-alpha', 'background',
     '-colorspace', 'Gray', '-threshold', '65%',
@@ -54,7 +64,7 @@ function addCoverEngravings(source) {
   ], { encoding: 'utf8' })
   if (cedarMaskResult.status !== 0) throw new Error(cedarMaskResult.stderr || 'Failed to rasterize cedar')
 
-  const beirutMaskResult = spawnSync('magick', [
+  const beirutMaskResult = spawnSync(imageMagick, [
     beirutSource, '-trim', '+repage', '-resize', '320x174!',
     '-background', 'white', '-alpha', 'background',
     '-colorspace', 'Gray', '-threshold', '65%',

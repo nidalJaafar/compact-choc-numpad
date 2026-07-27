@@ -42,5 +42,3 @@
 | JLCPCB, 5 boards | about $5 |
 | Local printed case | about $5–15 |
 | Complete project | about $40–50 |
-
-The older custom [`assets/keycap.stl`](assets/keycap.stl) remains in the project only as an optional print-fit prototype; it is not part of this locked purchasing BOM.

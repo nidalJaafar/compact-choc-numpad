@@ -7,8 +7,8 @@ The files under `footprints/ceoloide/` come from
 and are distributed under the MIT License. The copyright and full license text
 are retained in [`footprints/ceoloide/LICENSE`](footprints/ceoloide/LICENSE).
 
-## Lebanese flag artwork
+## Lebanese cedar artwork
 
-The Lebanese flag artwork used to derive the cedar engraving is identified as
-public domain in the project documentation. Confirm the status of any replaced
-artwork before redistributing it.
+The artwork used to derive the cedar engraving is identified as public domain
+in the project documentation. Confirm the status of any replacement artwork
+before redistributing it.

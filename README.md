@@ -44,7 +44,7 @@ map and flashing notes.
 ## Repository layout
 
 ```text
-assets/       Cedar, Beirut artwork, and keycap reference
+assets/       Cedar and Beirut engraving artwork
 firmware/     QMK keyboard definition and default keymap
 footprints/   Project-specific Ergogen footprint generators
 scripts/      Routing, case, validation, and fabrication helpers
@@ -150,10 +150,9 @@ the top cover remains closed at the rear.
 
 The cedar is generated from `assets/cedar-traced.svg`, and the Beirut
 calligraphy from `assets/beirut-traced.svg`. These smooth vector traces are
-derived from `assets/lebanese_flag.svg` and `assets/beirut.png`, then sampled
-at approximately 0.09 mm for robust watertight booleans without visible
-raster stair-stepping in the printed part. The flag artwork is derived
-from the public-domain Lebanese flag by Henri Pharaon.
+sampled at approximately 0.09 mm for robust watertight booleans without visible
+raster stair-stepping in the printed part. The cedar artwork is derived from
+the public-domain Lebanese flag by Henri Pharaon.
 
 Print the tray floor-down. Because the exposed-switch cover has two deck
 heights, print it upright on one long edge with a brim, or use slicer-generated

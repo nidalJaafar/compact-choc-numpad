@@ -1,0 +1,24 @@
+{
+  "name": "compact-choc-numpad",
+  "private": true,
+  "version": "0.4.0",
+  "description": "Compact 4x5 Kailh PG1353 tactile numpad using a Waveshare RP2040-Zero",
+  "scripts": {
+    "generate:layout": "ergogen . --output output",
+    "generate:case": "npm run generate:layout && node scripts/generate-case.js",
+    "setup:router": "bash scripts/setup-freerouting.sh",
+    "route": "python scripts/route.py",
+    "sync:footprints": "python scripts/sync_kicad_footprints.py",
+    "generate": "npm run generate:layout && npm run route && node scripts/generate-case.js",
+    "validate": "npm run sync:footprints && kicad-cli pcb drc output/pcbs/compact_choc_numpad-routed.kicad_pcb --output output/pcbs/compact_choc_numpad-routed-drc.rpt",
+    "gerbers": "bash scripts/generate-gerbers.sh",
+    "render": "kicad-cli pcb render output/pcbs/compact_choc_numpad-routed.kicad_pcb --output output/compact_choc_numpad-top.png --side top --width 1200 --height 1200 --background opaque --quality high",
+    "print:1to1": "python scripts/print_1to1.py",
+    "check:source": "python3 -m json.tool firmware/qmk/compact_choc_numpad/keyboard.json >/dev/null && python3 -m py_compile scripts/*.py && bash -n scripts/*.sh",
+    "ci": "npm run check:source && npm run generate:layout && test -f output/pcbs/compact_choc_numpad.kicad_pcb && test -f output/cases/top_cover.jscad && test -f output/cases/bottom_tray.jscad"
+  },
+  "devDependencies": {
+    "@jscad/cli": "1.10.0",
+    "ergogen": "4.2.1"
+  }
+}

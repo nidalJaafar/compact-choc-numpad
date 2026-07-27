@@ -1,0 +1,36 @@
+name: Design problem
+description: Report a PCB, enclosure, firmware, or build issue.
+title: "[Issue]: "
+labels: [bug]
+body:
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - PCB / footprints
+        - Enclosure / STL
+        - QMK firmware
+        - Build scripts
+        - Documentation
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: What happened?
+      description: Include exact dimensions, component markings, or console output when relevant.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Reproduction steps
+      placeholder: Tell us which command or physical fit check exposed the problem.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Supporting files
+      description: Attach photos, caliper readings, screenshots, or reports. Do not upload private purchase details.

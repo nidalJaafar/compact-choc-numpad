@@ -1,0 +1,317 @@
+meta:
+  engine: 4.2.1
+  name: compact_choc_numpad
+  version: 0.4.0
+  author: nidal
+
+units:
+  kx: 19.05
+  ky: 19.05
+  board_margin: 2
+  case_wall: 2.2
+  case_clearance: 0.35
+  case_floor: 1.6
+  case_height: 13.4
+  exposed_wall_height: 9
+  pcb_support_height: 3.5
+  case_boss_radius: 3.4
+  case_pilot_radius: 0.85
+  frame_height: 2
+  frame_lip_height: 1.2
+  cover_switch_cutout: 16.2
+  cover_encoder_radius: 4
+  usb_notch_width: 11
+  usb_notch_depth: 5
+  usb_notch_floor: 5.6
+  usb_notch_height: 6
+
+points:
+  zones:
+    matrix:
+      key:
+        spread: kx
+        padding: ky
+        tags: [key]
+      columns:
+        c0:
+          key:
+            column_net: COL0
+        c1:
+          key:
+            column_net: COL1
+        c2:
+          key:
+            column_net: COL2
+        c3:
+          key:
+            column_net: COL3
+      rows:
+        r4:
+          row_net: ROW4
+        r3:
+          row_net: ROW3
+        r2:
+          row_net: ROW2
+        r1:
+          row_net: ROW1
+        r0:
+          row_net: ROW0
+
+outlines:
+  keys:
+    - what: rectangle
+      where: key
+      size: [kx, ky]
+  board:
+    - what: rectangle
+      where:
+        ref: matrix_c1_r2
+        shift: [9.525, 12.75]
+      size: [82.2, 124.5]
+      fillet: 2
+
+  # Private outlines used to construct the two-piece printed enclosure.
+  _case_outer:
+    - name: board
+      expand: case_wall + case_clearance
+      fillet: 3
+  _case_cavity:
+    - name: board
+      expand: case_clearance
+      fillet: 2.25
+  _frame_lip_outer:
+    - name: board
+      expand: case_clearance - 0.2
+      fillet: 2.1
+  _frame_opening:
+    - name: board
+      expand: -1.7
+      fillet: 1
+  _case_bosses:
+    - what: circle
+      where:
+        ref: matrix_c0_r4
+        shift: [-11, 99.25]
+      radius: case_boss_radius
+    - what: circle
+      where:
+        ref: matrix_c3_r4
+        shift: [10.85, 99.25]
+      radius: case_boss_radius
+    - what: circle
+      where:
+        ref: matrix_c0_r4
+        shift: [-11, 0]
+      radius: case_boss_radius
+    - what: circle
+      where:
+        ref: matrix_c3_r4
+        shift: [10.85, 0]
+      radius: case_boss_radius
+  _case_pilot_holes:
+    - what: circle
+      where:
+        ref: matrix_c0_r4
+        shift: [-11, 99.25]
+      radius: case_pilot_radius
+    - what: circle
+      where:
+        ref: matrix_c3_r4
+        shift: [10.85, 99.25]
+      radius: case_pilot_radius
+    - what: circle
+      where:
+        ref: matrix_c0_r4
+        shift: [-11, 0]
+      radius: case_pilot_radius
+    - what: circle
+      where:
+        ref: matrix_c3_r4
+        shift: [10.85, 0]
+      radius: case_pilot_radius
+  # Enclosed rear-wall window aligned with the RP2040-Zero USB-C connector.
+  _usb_notch:
+    - what: rectangle
+      where:
+        ref: matrix_c0_r4
+        shift: [7, 113.5]
+      size: [usb_notch_width, usb_notch_depth]
+  _cover_switch_openings:
+    - what: rectangle
+      where: key
+      size: [cover_switch_cutout, cover_switch_cutout]
+  # Lowers only the key-field walls. The rear controller/encoder compartment
+  # remains full height, producing an exposed-switch floating-key profile.
+  _key_field_lowering:
+    - what: rectangle
+      where:
+        ref: matrix_c1_r2
+        shift: [9.525, -6.6]
+      size: [100, 113]
+  _cover_encoder_opening:
+    - what: circle
+      where:
+        ref: matrix_c3_r4
+        shift: [-2.15, 99.25]
+      radius: cover_encoder_radius
+cases:
+  _bottom_shell:
+    outer:
+      what: outline
+      name: _case_outer
+      extrude: case_height
+    cavity:
+      what: outline
+      name: _case_cavity
+      extrude: case_height - case_floor
+      shift: [0, 0, case_floor]
+      operation: subtract
+  _bottom_with_bosses:
+    shell:
+      what: case
+      name: _bottom_shell
+    bosses:
+      what: outline
+      name: _case_bosses
+      extrude: pcb_support_height
+      shift: [0, 0, case_floor]
+      operation: add
+  _bottom_stepped:
+    body:
+      what: case
+      name: _bottom_with_bosses
+    lowered_key_field:
+      what: outline
+      name: _key_field_lowering
+      extrude: case_height - exposed_wall_height
+      shift: [0, 0, exposed_wall_height]
+      operation: subtract
+  bottom_tray:
+    body:
+      what: case
+      name: _bottom_stepped
+    pilot_holes:
+      what: outline
+      name: _case_pilot_holes
+      extrude: case_floor + pcb_support_height
+      operation: subtract
+    usb_notch:
+      what: outline
+      name: _usb_notch
+      extrude: usb_notch_height
+      shift: [0, 0, usb_notch_floor]
+      operation: subtract
+
+  _top_lip:
+    outer:
+      what: outline
+      name: _frame_lip_outer
+      extrude: frame_lip_height
+    opening:
+      what: outline
+      name: _frame_opening
+      extrude: frame_lip_height
+      operation: subtract
+  _top_with_cap:
+    cap:
+      what: outline
+      name: _case_outer
+      extrude: frame_height
+    lip:
+      what: case
+      name: _top_lip
+      shift: [0, 0, frame_height]
+      operation: add
+  top_cover:
+    body:
+      what: case
+      name: _top_with_cap
+    switch_openings:
+      what: outline
+      name: _cover_switch_openings
+      extrude: frame_lip_height + frame_height
+      operation: subtract
+    encoder_opening:
+      what: outline
+      name: _cover_encoder_opening
+      extrude: frame_lip_height + frame_height
+      operation: subtract
+pcbs:
+  compact_choc_numpad:
+    template: kicad8
+    outlines:
+      main:
+        outline: board
+    footprints:
+      switches:
+        what: switch_choc_v2_hotswap
+        where: key
+        params:
+          designator: SW
+          side: B
+          from: "{{column_net}}"
+          to: "{{name}}"
+      diodes:
+        what: diode_do35
+        where: key
+        adjust:
+          # Ergogen's positive layout Y is negative KiCad Y. A negative shift
+          # therefore places the diode in the physical positive-Y half, clear
+          # of the Choc socket body on the back.
+          shift: [2.5, -7.5]
+        params:
+          designator: D
+          side: B
+          from: "{{name}}"
+          to: "{{row_net}}"
+      controller:
+        what: rp2040_zero
+        where:
+          ref: matrix_c0_r4
+          shift: [7, 99.25]
+        params:
+          GP0: COL0
+          GP1: COL1
+          GP2: COL2
+          GP3: COL3
+          GP4: ROW0
+          GP5: ROW1
+          GP6: ROW2
+          GP7: ROW3
+          GP8: ROW4
+          GP14: ENC_A
+          GP15: ENC_B
+          GP26: ENC_SW
+      encoder:
+        what: pec11r_4215f_s0024
+        where:
+          ref: matrix_c3_r4
+          shift: [-2.15, 99.25]
+        params:
+          designator: ENC
+          side: F
+          A: ENC_A
+          B: GND
+          C: ENC_B
+          S1: ENC_SW
+          S2: GND
+      mounting_hole_top_left:
+        what: ceoloide/mounting_hole_npth
+        where:
+          ref: matrix_c0_r4
+          shift: [-11, 99.25]
+      mounting_hole_top_right:
+        what: ceoloide/mounting_hole_npth
+        where:
+          ref: matrix_c3_r4
+          shift: [10.85, 99.25]
+      mounting_hole_bottom_left:
+        what: ceoloide/mounting_hole_npth
+        where:
+          ref: matrix_c0_r4
+          shift: [-11, 0]
+      mounting_hole_bottom_right:
+        what: ceoloide/mounting_hole_npth
+        where:
+          ref: matrix_c3_r4
+          shift: [10.85, 0]

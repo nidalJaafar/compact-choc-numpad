@@ -6,6 +6,9 @@
 
 The locked purchasing list is in [`BOM_FINAL.md`](BOM_FINAL.md).
 
+Pre-generated manufacturing and enclosure files are available from the
+[latest GitHub release](https://github.com/nidalJaafar/compact-choc-numpad/releases/latest).
+
 > **Project status:** revision A, not yet physically manufactured. Print and
 > test the 1:1 template with the exact purchased parts before ordering PCBs.
 
@@ -102,6 +105,25 @@ The JLCPCB-ready fabrication archive is written to
 `output/compact_choc_numpad-gerbers.zip`. It contains the two copper layers,
 two solder-mask layers, two silkscreen layers, board outline, Gerber job file,
 and separate plated and non-plated Excellon drill files.
+
+## Releases
+
+Generated hardware files are not committed to the repository. Pushing a tag
+such as `v0.4.0` runs the full routing, DRC, enclosure, rendering, and export
+pipeline and publishes a GitHub Release containing:
+
+- JLCPCB-ready Gerbers;
+- routed and unrouted KiCad projects with exact local footprints;
+- printable top-cover and bottom-tray STLs;
+- a true-scale fit-check PDF;
+- PCB and enclosure previews;
+- an Ergogen web-editor bundle;
+- QMK source, BOM, documentation, and SHA-256 checksums; and
+- one complete ZIP containing the full release set.
+
+Release files are generated from the tagged source in a clean GitHub runner.
+They remain revision-A artifacts until the physical component fit checks in
+this README have been completed.
 
 ## GPIO assignment
 

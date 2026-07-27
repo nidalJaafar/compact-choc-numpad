@@ -27,7 +27,7 @@ jobs:
           sudo add-apt-repository --yes ppa:kicad/kicad-10.0-releases
           sudo apt-get update
           sudo apt-get install --yes --no-install-recommends \
-            kicad imagemagick libarchive-tools python3-matplotlib \
+            kicad imagemagick libarchive-tools librsvg2-bin python3-matplotlib \
             python3-networkx python3-numpy python3-pip
           python3 -m pip install --break-system-packages trimesh
 
